@@ -1,18 +1,45 @@
-import React from "react";
+import React, { useLayoutEffect, useRef } from "react";
+import { gsap } from "gsap";
 
 function Preloader() {
+  const stairsRef = useRef(null);
+
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      const stairs = gsap.utils.toArray(".preload-stair", stairsRef.current);
+
+      gsap.set(stairs, { y: "100%" });
+
+      const tl = gsap.timeline({ repeat: -1, repeatDelay: 0.1 });
+
+      tl.to(stairs, {
+        y: "0%",
+        duration: 0.7,
+        stagger: { amount: -0.25 },
+        ease: "power3.inOut"
+      }).to(stairs, {
+        y: "-100%",
+        duration: 0.7,
+        stagger: { amount: -0.25 },
+        ease: "power3.inOut"
+      });
+    }, stairsRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <div className="fixed inset-0 z-[9998] flex items-center justify-center bg-[#080808]">
-      <div className="flex flex-col items-center gap-4">
-        <div className="w-20 h-20 bg-[#111111] rounded-lg grid grid-cols-2 gap-1 p-2">
-          <div className="bg-white/10 rounded-sm" />
-          <div className="bg-white/20 rounded-sm" />
-          <div className="bg-white/30 rounded-sm" />
-          <div className="bg-white/40 rounded-sm" />
-        </div>
-        <p className="text-[0.75rem] tracking-[0.25em] uppercase text-white/60">
-          Loading experience…
-        </p>
+    <div className="fixed inset-0 z-[9998] bg-[#080808]">
+      <div
+        ref={stairsRef}
+        className="absolute inset-0 flex h-full w-full pointer-events-none"
+      >
+        <div className="preload-stair h-full w-1/6 bg-black" />
+        <div className="preload-stair h-full w-1/6 bg-black" />
+        <div className="preload-stair h-full w-1/6 bg-black" />
+        <div className="preload-stair h-full w-1/6 bg-black" />
+        <div className="preload-stair h-full w-1/6 bg-black" />
+        <div className="preload-stair h-full w-1/6 bg-black" />
       </div>
     </div>
   );
