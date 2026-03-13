@@ -37,17 +37,66 @@ function PageTransition({ children }) {
       }
 
       isAnimatingRef.current = true;
-      const tl = gsap.timeline({
+      const currentPage = pageRef.current;
+
+      // Exit animation: stairs come in while current page fades out
+      const exitTl = gsap.timeline({
         onComplete: () => {
-          isAnimatingRef.current = false;
+          // After exit completes and stairs fully cover, change route
+          navigate(to);
+          window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+
+          // Wait a frame so new route DOM is rendered, then run entry animation
+          window.requestAnimationFrame(() => {
+            const newPage = pageRef.current;
+            const stairsEls = gsap.utils.toArray(".stair", stairsRef.current);
+
+            if (!newPage || !stairsEls.length) {
+              isAnimatingRef.current = false;
+              gsap.set(stairsRef.current, { display: "none" });
+              gsap.set(stairsEls, { y: "100%" });
+              return;
+            }
+
+            gsap.set(newPage, { opacity: 0 });
+
+            const entryTl = gsap.timeline({
+              onComplete: () => {
+                isAnimatingRef.current = false;
+                gsap.set(stairsRef.current, { display: "none" });
+                gsap.set(stairsEls, { y: "100%" });
+              }
+            });
+
+            entryTl.to(
+              stairsEls,
+              {
+                y: "-100%",
+                duration: 0.55,
+                stagger: { amount: -0.25 },
+                ease: "power3.inOut"
+              },
+              0
+            );
+
+            entryTl.to(
+              newPage,
+              {
+                opacity: 1,
+                duration: 0.5,
+                ease: "power2.out"
+              },
+              0.05
+            );
+          });
         }
       });
 
-      tl.set(stairsRef.current, { display: "block" });
+      exitTl.set(stairsRef.current, { display: "block" });
+      exitTl.set(stairs, { y: "100%" });
 
-      tl.fromTo(
+      exitTl.to(
         stairs,
-        { y: "100%" },
         {
           y: "0%",
           duration: 0.55,
@@ -57,8 +106,8 @@ function PageTransition({ children }) {
         0
       );
 
-      tl.to(
-        pageRef.current,
+      exitTl.to(
+        currentPage,
         {
           opacity: 0,
           duration: 0.45,
@@ -66,35 +115,6 @@ function PageTransition({ children }) {
         },
         0
       );
-
-      tl.add(() => {
-        navigate(to);
-        window.scrollTo({ top: 0, left: 0, behavior: "auto" });
-      });
-
-      tl.to(
-        stairs,
-        {
-          y: "-100%",
-          duration: 0.55,
-          stagger: { amount: -0.25 },
-          ease: "power3.inOut"
-        },
-        "+=0.05"
-      );
-
-      tl.to(
-        pageRef.current,
-        {
-          opacity: 1,
-          duration: 0.5,
-          ease: "power2.out"
-        },
-        "<"
-      );
-
-      tl.set(stairsRef.current, { display: "none" });
-      tl.set(stairs, { y: "100%" });
     },
     [location.pathname, navigate]
   );

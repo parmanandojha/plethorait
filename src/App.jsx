@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
 import PageTransition from "./components/PageTransition.jsx";
 import ScrollProgress from "./components/ScrollProgress.jsx";
+import Preloader from "./components/Preloader.jsx";
 import Home from "./pages/Home.jsx";
 import About from "./pages/About.jsx";
 import Work from "./pages/Work.jsx";
@@ -11,6 +12,7 @@ import Contact from "./pages/Contact.jsx";
 import ProjectDetail from "./pages/ProjectDetail.jsx";
 import BlogList from "./pages/BlogList.jsx";
 import BlogDetail from "./pages/BlogDetail.jsx";
+import { useImagePreloader } from "./hooks/useImagePreloader.js";
 import {
   initSmoothScroll,
   setupUnderlineHover,
@@ -19,6 +21,7 @@ import {
 
 function App() {
   const location = useLocation();
+  const imagesReady = useImagePreloader();
 
   useEffect(() => {
     const destroySmoothScroll = initSmoothScroll();
@@ -36,6 +39,10 @@ function App() {
       if (cleanupNavUnderline) cleanupNavUnderline();
     };
   }, [location.pathname]);
+
+  if (!imagesReady) {
+    return <Preloader />;
+  }
 
   return (
     <div>
