@@ -1,0 +1,66 @@
+import React from "react";
+import { useParams } from "react-router-dom";
+import { projects } from "../data/projects.js";
+
+function ProjectDetail() {
+  const { slug } = useParams();
+  const project = projects.find((p) => p.slug === slug);
+
+  if (!project) {
+    return (
+      <div className="min-h-screen flex items-center justify-center px-6">
+        <p className="text-[1rem]">Project not found.</p>
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <div
+        className="relative h-[100vh] w-full bg-cover bg-center text-white"
+        style={{ backgroundImage: `url("${project.heroImage}")` }}
+      >
+        <div className="absolute inset-0 bg-black/40" />
+        <div className="relative h-full flex flex-col justify-end px-6 pb-[12vh]">
+          <div className="text-[1rem] uppercase mb-4">
+            {project.category} — {project.year}
+          </div>
+          <h1 className="text-[clamp(3rem,6vw,5rem)] mb-4">
+            {project.title}
+          </h1>
+          <p className="text-[1.1rem] max-w-xl text-white/80">
+            {project.description}
+          </p>
+        </div>
+      </div>
+
+      <section className="px-6 py-[16vh] grid md:grid-cols-12 gap-12">
+        <div className="md:col-span-4 space-y-4 text-[0.9rem] uppercase">
+          <div>
+            <div className="text-white/60">Client</div>
+            <div>{project.client}</div>
+          </div>
+          <div>
+            <div className="text-white/60">Location</div>
+            <div>{project.location}</div>
+          </div>
+          <div>
+            <div className="text-white/60">Services</div>
+            <div>{project.services.join(", ")}</div>
+          </div>
+        </div>
+
+        <div className="md:col-span-8 space-y-6 text-[1rem] leading-[140%]">
+          {project.body.map((paragraph, idx) => (
+            <p key={idx} className="text-white/80">
+              {paragraph}
+            </p>
+          ))}
+        </div>
+      </section>
+    </>
+  );
+}
+
+export default ProjectDetail;
+
