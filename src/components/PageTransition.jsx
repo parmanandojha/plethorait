@@ -42,52 +42,58 @@ function PageTransition({ children }) {
       // Exit animation: stairs come in while current page fades out
       const exitTl = gsap.timeline({
         onComplete: () => {
-          // After exit completes and stairs fully cover, change route
           navigate(to);
           window.scrollTo({ top: 0, left: 0, behavior: "auto" });
 
-          // Wait a frame so new route DOM is rendered, then run entry animation
+          // Double rAF + short delay so React and image-heavy layout settle before stairs-out
           window.requestAnimationFrame(() => {
-            const newPage = pageRef.current;
-            const stairsEls = gsap.utils.toArray(".stair", stairsRef.current);
+            window.requestAnimationFrame(() => {
+              const runEntry = () => {
+                const newPage = pageRef.current;
+                const stairsEls = gsap.utils.toArray(".stair", stairsRef.current);
 
-            if (!newPage || !stairsEls.length) {
-              isAnimatingRef.current = false;
-              gsap.set(stairsRef.current, { display: "none" });
-              gsap.set(stairsEls, { y: "100%" });
-              return;
-            }
+                if (!newPage || !stairsEls.length) {
+                  isAnimatingRef.current = false;
+                  gsap.set(stairsRef.current, { display: "none" });
+                  gsap.set(stairsEls, { y: "100%" });
+                  return;
+                }
 
-            gsap.set(newPage, { opacity: 0 });
+                gsap.set(newPage, { opacity: 0 });
 
-            const entryTl = gsap.timeline({
-              onComplete: () => {
-                isAnimatingRef.current = false;
-                gsap.set(stairsRef.current, { display: "none" });
-                gsap.set(stairsEls, { y: "100%" });
-              }
+                const entryTl = gsap.timeline({
+                  onComplete: () => {
+                    isAnimatingRef.current = false;
+                    gsap.set(stairsRef.current, { display: "none" });
+                    gsap.set(stairsEls, { y: "100%" });
+                  }
+                });
+
+                entryTl.to(
+                  stairsEls,
+                  {
+                    y: "-100%",
+                    duration: 0.65,
+                    stagger: { amount: -0.28 },
+                    ease: "power3.inOut"
+                  },
+                  0
+                );
+
+                entryTl.to(
+                  newPage,
+                  {
+                    opacity: 1,
+                    duration: 0.6,
+                    ease: "power2.out"
+                  },
+                  0.08
+                );
+              };
+
+              // Give image-heavy pages time to mount and layout before animating stairs out
+              setTimeout(runEntry, 80);
             });
-
-            entryTl.to(
-              stairsEls,
-              {
-                y: "-100%",
-                duration: 0.55,
-                stagger: { amount: -0.25 },
-                ease: "power3.inOut"
-              },
-              0
-            );
-
-            entryTl.to(
-              newPage,
-              {
-                opacity: 1,
-                duration: 0.5,
-                ease: "power2.out"
-              },
-              0.05
-            );
           });
         }
       });
