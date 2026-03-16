@@ -12,8 +12,6 @@ import Contact from "./pages/Contact.jsx";
 import ProjectDetail from "./pages/ProjectDetail.jsx";
 import BlogList from "./pages/BlogList.jsx";
 import BlogDetail from "./pages/BlogDetail.jsx";
-import AdminLogin from "./pages/AdminLogin.jsx";
-import AdminDashboard from "./pages/AdminDashboard.jsx";
 import PolicyPage from "./pages/PolicyPage.jsx";
 import ConsentBanner from "./components/ConsentBanner.jsx";
 import { useImagePreloader } from "./hooks/useImagePreloader.js";
@@ -26,7 +24,6 @@ import {
 function App() {
   const location = useLocation();
   const imagesReady = useImagePreloader();
-  const isAdminRoute = location.pathname.startsWith("/admin");
 
   useEffect(() => {
     const destroySmoothScroll = initSmoothScroll();
@@ -53,7 +50,7 @@ function App() {
     <div>
       <ScrollProgress />
       <PageTransition>
-        {!isAdminRoute && <Navbar />}
+        <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
@@ -62,13 +59,11 @@ function App() {
           <Route path="/project/:slug" element={<ProjectDetail />} />
           <Route path="/blog" element={<BlogList />} />
           <Route path="/blog/:slug" element={<BlogDetail />} />
-          <Route path="/admin/login" element={<AdminLogin />} />
-          <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/privacy-policy" element={<PolicyPage />} />
         </Routes>
-        {!isAdminRoute && <Footer />}
+        <Footer />
       </PageTransition>
-      {!isAdminRoute && <ConsentBanner />}
+      <ConsentBanner />
     </div>
   );
 }

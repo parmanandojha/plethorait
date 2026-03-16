@@ -1,49 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || "";
-
 function BlogDetail() {
   const { slug } = useParams();
   const [blog, setBlog] = useState(null);
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    async function load() {
-      // Prefer backend if configured
-      if (API_BASE) {
-        try {
-          const res = await fetch(`${API_BASE}/api/blogs/${slug}`);
-          if (res.ok) {
-            const data = await res.json();
-            setBlog(data);
-            setLoaded(true);
-            return;
-          }
-        } catch {
-          // fall through to localStorage
-        }
-      }
-
-      // Fallback to localStorage cache
-      try {
-        const raw = window.localStorage.getItem("plethora_admin_blogs");
-        if (raw) {
-          const parsed = JSON.parse(raw);
-          if (Array.isArray(parsed)) {
-            const found = parsed.find((b) => b.id === slug);
-            if (found) {
-              setBlog(found);
-            }
+    fetch("/blogs.json")
+      .then((r) => r.json())
+      .then((data) => {
+        if (Array.isArray(data)) {
+          const found = data.find((b) => String(b.id) === String(slug));
+          if (found) {
+            setBlog(found);
           }
         }
-      } catch {
-        // ignore
-      }
-      setLoaded(true);
-    }
-
-    load();
+        setLoaded(true);
+      })
+      .catch(() => {
+        setLoaded(true);
+      });
   }, [slug]);
 
   if (!loaded) {

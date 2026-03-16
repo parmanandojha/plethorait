@@ -1,0 +1,10 @@
+[
+  {
+    "id": "blog-sample-1",
+    "title": "Sample Blog Title",
+    "writer": "Plethora IT",
+    "keywords": "design, technology",
+    "content": "Replace this sample entry in public/blogs.json with your real blog content.\n\nYou can add multiple paragraphs by separating them with a blank line."
+  }
+]
+
