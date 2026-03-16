@@ -270,8 +270,9 @@ export function aboutIntroScrollAnimation() {
     scrollTrigger: {
       trigger: "#about-intro-highlight",
       start: "top 70%",
-      end: "bottom 40%",
-      scrub: true
+      end: "bottom 50%",
+      scrub: true,
+      markers: false
     }
   });
 

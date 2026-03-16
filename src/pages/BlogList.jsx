@@ -1,8 +1,25 @@
-import React from "react";
-import { blogs } from "../data/blogs.js";
+import React, { useEffect, useState } from "react";
 import AnimatedLink from "../components/AnimatedLink.jsx";
 
+function getAdminBlogs() {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = window.localStorage.getItem("plethora_admin_blogs");
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
 function BlogList() {
+  const [blogs, setBlogs] = useState([]);
+
+  useEffect(() => {
+    setBlogs(getAdminBlogs());
+  }, []);
+
   return (
     <div className="relative h-full py-[12vh] sm:py-[20vh] px-4 sm:px-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 pb-[6vh] sm:pb-[8vh]">
@@ -19,7 +36,7 @@ function BlogList() {
         {blogs.map((blog) => (
           <AnimatedLink
             key={blog.id}
-            to={`/blog/${blog.slug}`}
+            to={`/blog/${blog.id}`}
             className="space-y-4 sm:space-y-6 group"
           >
             <div className="border-t border-white/40 pt-6 sm:pt-8" />
@@ -29,11 +46,12 @@ function BlogList() {
             </h2>
 
             <p className="text-white/50 text-[clamp(0.7rem,1.5vw,0.8rem)] uppercase">
-              {blog.date} · {blog.readTime}
+              {blog.writer || "Admin"}
             </p>
 
             <p className="text-white/70 text-[clamp(0.875rem,1.5vw,1rem)] max-w-md">
-              {blog.excerpt}
+              {(blog.content || "").slice(0, 120)}
+              {(blog.content || "").length > 120 ? "…" : ""}
             </p>
           </AnimatedLink>
         ))}

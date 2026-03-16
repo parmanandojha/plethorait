@@ -1,14 +1,30 @@
-import React from "react";
-import { blogs } from "../../data/blogs.js";
+import React, { useEffect, useState } from "react";
 import AnimatedLink from "../AnimatedLink.jsx";
 
+function getAdminBlogs() {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = window.localStorage.getItem("plethora_admin_blogs");
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
 function BlogsSection() {
-  const featured = blogs.slice(0, 3);
+  const [featured, setFeatured] = useState([]);
+
+  useEffect(() => {
+    const all = getAdminBlogs();
+    setFeatured(all.slice(0, 3));
+  }, []);
 
   return (
     <div className="relative h-full py-[12vh] sm:py-[20vh] px-4 sm:px-6">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 pb-[6vh] sm:pb-[8vh]">
-        <div className="text-[clamp(2rem,5vw,4.8rem)]">
+      <div className="flex flex-row justify-between items-center sm:items-end gap-4 pb-[6vh] sm:pb-[8vh]">
+        <div className="text-[clamp(2.2rem,5vw,4.8rem)]">
           <h3>Blogs</h3>
         </div>
 
@@ -27,7 +43,7 @@ function BlogsSection() {
         {featured.map((blog) => (
           <AnimatedLink
             key={blog.id}
-            to={`/blog/${blog.slug}`}
+            to={`/blog/${blog.id}`}
             className="space-y-4 sm:space-y-6 group"
           >
             <div className="border-t border-white/40 pt-6 sm:pt-8" />
@@ -37,7 +53,8 @@ function BlogsSection() {
             </h2>
 
             <p className="text-white/70 text-[clamp(0.875rem,1.5vw,1rem)] max-w-md">
-              {blog.excerpt}
+              {(blog.content || "").slice(0, 120)}
+              {(blog.content || "").length > 120 ? "…" : ""}
             </p>
           </AnimatedLink>
         ))}

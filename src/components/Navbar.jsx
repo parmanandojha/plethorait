@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect, useRef, useCallback } from "react";
 import { useLocation } from "react-router-dom";
+import { gsap } from "gsap";
 import AnimatedLink from "./AnimatedLink.jsx";
 
 const navLinks = [
@@ -12,14 +13,46 @@ const navLinks = [
 
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
   const location = useLocation();
+  const stairsRef = useRef(null);
+  const menuContentRef = useRef(null);
+
+  const closeMenu = useCallback(() => {
+    const stairs = stairsRef.current ? gsap.utils.toArray(".menu-stair", stairsRef.current) : [];
+    const content = menuContentRef.current;
+    if (!stairs.length || !content) {
+      setMenuOpen(false);
+      return;
+    }
+    setIsClosing(true);
+    const tl = gsap.timeline({
+      onComplete: () => {
+        setIsClosing(false);
+        setMenuOpen(false);
+        gsap.set(stairs, { y: "100%" });
+      }
+    });
+    // 1s delay then smooth text fade out, then stairs out
+    tl.to(content, { opacity: 0, duration: 0.6, ease: "power2.inOut" }, 1);
+    tl.to(
+      stairs,
+      {
+        y: "-100%",
+        duration: 0.5,
+        stagger: { amount: -0.22 },
+        ease: "power3.inOut"
+      },
+      1.35
+    );
+  }, []);
 
   useEffect(() => {
     setMenuOpen(false);
   }, [location.pathname]);
 
   useEffect(() => {
-    if (menuOpen) {
+    if (menuOpen || isClosing) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
@@ -27,11 +60,43 @@ function Navbar() {
     return () => {
       document.body.style.overflow = "";
     };
-  }, [menuOpen]);
+  }, [menuOpen, isClosing]);
+
+  useLayoutEffect(() => {
+    if (!menuOpen || isClosing) return;
+    const stairs = stairsRef.current ? gsap.utils.toArray(".menu-stair", stairsRef.current) : [];
+    const content = menuContentRef.current;
+    if (!stairs.length || !content) return;
+
+    gsap.set(stairs, { y: "100%" });
+    gsap.set(content, { opacity: 0 });
+
+    const tl = gsap.timeline({
+      onComplete: () => {
+        gsap.set(stairs, { y: "0%" });
+      }
+    });
+    tl.to(
+      stairs,
+      {
+        y: "0%",
+        duration: 0.5,
+        stagger: { amount: -0.22 },
+        ease: "power3.inOut"
+      },
+      0
+    );
+    // 1s delay then smooth text fade in
+    tl.to(content, { opacity: 1, duration: 0.6, ease: "power2.inOut" }, 1);
+  }, [menuOpen, isClosing]);
+
+  const showOverlay = menuOpen || isClosing;
 
   return (
     <>
-      <nav className="absolute top-2 left-0 flex w-full p-4 sm:p-6 text-[#ffff] z-20">
+      <nav
+        className={`absolute top-2 left-0 flex w-full p-4 sm:p-6 text-[#ffff] ${showOverlay ? "z-[9999]" : "z-20"}`}
+      >
         <div className="w-1/2 min-w-0">
           <AnimatedLink to="/" className="block">
             <img src="/plethorait logo.svg" className="h-4 sm:h-5 w-auto" alt="Plethora IT" />
@@ -63,8 +128,8 @@ function Navbar() {
             type="button"
             aria-label={menuOpen ? "Close menu" : "Open menu"}
             aria-expanded={menuOpen}
-            className="p-2 -mr-2 text-white focus:outline-none focus:ring-2 focus:ring-white/50 rounded"
-            onClick={() => setMenuOpen((o) => !o)}
+            className="px-2 -mr-2 text-white focus:outline-none focus:ring-2 focus:ring-white/50 rounded"
+            onClick={() => (menuOpen ? closeMenu() : setMenuOpen(true))}
           >
             {menuOpen ? (
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -79,35 +144,62 @@ function Navbar() {
         </div>
       </nav>
 
-      {/* Mobile dropdown overlay (below md only) */}
-      <div
-        role="dialog"
-        aria-modal="true"
-        aria-label="Navigation menu"
-        className={`fixed inset-0 z-10 md:hidden bg-[#080808]/95 backdrop-blur-sm transition-opacity duration-300 ${
-          menuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-        }`}
-        aria-hidden={!menuOpen}
-        onClick={() => setMenuOpen(false)}
-      >
+      {/* Mobile menu: 4 stairs + content (below md only) */}
+      {showOverlay && (
         <div
-          className="flex flex-col items-center justify-center min-h-full px-6 py-24 text-white"
-          onClick={(e) => e.stopPropagation()}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Navigation menu"
+          className="fixed inset-0 z-[9998] md:hidden"
+          aria-hidden={!menuOpen && !isClosing}
+          style={{
+            pointerEvents: isClosing ? "none" : "auto"
+          }}
         >
-          <div className="flex flex-col gap-6 text-center uppercase text-xl">
-            {navLinks.map(({ to, label }) => (
-              <AnimatedLink
-                key={to}
-                to={to}
-                className="nav-link-text py-2"
-              >
-                {label}
-              </AnimatedLink>
-            ))}
+          {/* 4 stairs layer */}
+          <div
+            ref={stairsRef}
+            className="absolute inset-0 flex h-full w-full pointer-events-none"
+          >
+            <div className="menu-stair h-full w-1/4 bg-black" />
+            <div className="menu-stair h-full w-1/4 bg-black" />
+            <div className="menu-stair h-full w-1/4 bg-black" />
+            <div className="menu-stair h-full w-1/4 bg-black" />
           </div>
-          <p className="mt-12 text-sm text-white/70 uppercase">Bangkok, Thailand</p>
+
+          {/* Invisible backdrop to close on outside click (only when not closing) */}
+          {!isClosing && (
+            <button
+              type="button"
+              aria-label="Close menu"
+              className="absolute inset-0 w-full h-full cursor-default z-0"
+              onClick={closeMenu}
+              style={{ background: "transparent" }}
+            />
+          )}
+
+          {/* Menu content (fades in after stairs) */}
+          <div
+            ref={menuContentRef}
+            className="absolute inset-0 flex flex-col leading-none  px-4 pb-4 justify-end text-white z-10 pointer-events-none"
+          >
+            <div
+              className="flex flex-col  uppercase text-[4rem] pointer-events-auto"
+            >
+              {navLinks.map(({ to, label }) => (
+                <AnimatedLink
+                  key={to}
+                  to={to}
+                  className="nav-link-text py-2"
+                >
+                  {label}
+                </AnimatedLink>
+              ))}
+            </div>
+            <p className="mt-12 text-sm text-white/70 uppercase">Bangkok, Thailand</p>
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 }
