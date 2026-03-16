@@ -8,10 +8,6 @@ html {
   scrollbar-width: none;
 }
 
-body {
-  @apply text-[12px] leading-none text-[#F9F9F9] bg-[#080808] overflow-x-hidden;
-}
-
 /* Hide scrollbar for WebKit-based browsers (Chrome, Safari, Edge) */
 html::-webkit-scrollbar {
   display: none;

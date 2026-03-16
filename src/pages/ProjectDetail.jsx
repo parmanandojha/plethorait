@@ -8,8 +8,8 @@ function ProjectDetail() {
 
   if (!project) {
     return (
-      <div className="min-h-screen flex items-center justify-center px-6">
-        <p className="text-[1rem]">Project not found.</p>
+      <div className="min-h-screen flex items-center justify-center px-4 sm:px-6">
+        <p className="text-[clamp(0.875rem,1.5vw,1rem)]">Project not found.</p>
       </div>
     );
   }
@@ -21,21 +21,21 @@ function ProjectDetail() {
         style={{ backgroundImage: `url("${project.heroImage}")` }}
       >
         <div className="absolute inset-0 bg-black/40" />
-        <div className="relative h-full flex flex-col justify-end px-6 pb-[12vh]">
-          <div className="text-[1rem] uppercase mb-4">
+        <div className="relative h-full flex flex-col justify-end px-4 sm:px-6 pb-[8vh] sm:pb-[12vh]">
+          <div className="text-[clamp(0.8rem,1.5vw,1rem)] uppercase mb-3 sm:mb-4">
             {project.category} — {project.year}
           </div>
-          <h1 className="text-[clamp(3rem,6vw,5rem)] mb-4">
+          <h1 className="text-[clamp(2rem,6vw,5rem)] mb-3 sm:mb-4">
             {project.title}
           </h1>
-          <p className="text-[1.1rem] max-w-xl text-white/80">
+          <p className="text-[clamp(0.9375rem,1.5vw,1.1rem)] max-w-xl text-white/80">
             {project.description}
           </p>
         </div>
       </div>
 
-      <section className="px-6 py-[16vh] grid md:grid-cols-12 gap-12">
-        <div className="md:col-span-4 space-y-4 text-[0.9rem] uppercase">
+      <section className="px-4 sm:px-6 py-[12vh] sm:py-[16vh] grid md:grid-cols-12 gap-8 sm:gap-12">
+        <div className="md:col-span-4 space-y-4 text-[clamp(0.8rem,1.2vw,0.9rem)] uppercase">
           <div>
             <div className="text-white/60">Client</div>
             <div>{project.client}</div>
@@ -50,7 +50,7 @@ function ProjectDetail() {
           </div>
         </div>
 
-        <div className="md:col-span-8 space-y-6 text-[1rem] leading-[140%]">
+        <div className="md:col-span-8 space-y-4 sm:space-y-6 text-[clamp(0.9375rem,1.5vw,1rem)] ">
           {project.body.map((paragraph, idx) => (
             <p key={idx} className="text-white/80">
               {paragraph}
