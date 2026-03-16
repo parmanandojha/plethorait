@@ -39,28 +39,28 @@ function Work() {
             <div className="inline-flex flex-row items-center gap-2">
               <span>[</span>
 
-              <div className="underline-link">
+              <div className="underline-link relative inline-block">
                 <button
                   type="button"
-                  className="underline-trigger inline-block"
+                  className="underline-trigger relative inline-block"
                   onClick={() => setViewMode("grid")}
                 >
                   Grid
                 </button>
-                <div className="underline-line border-b border-white w-full origin-left scale-x-0 pt-1" />
+                <div className="underline-line absolute left-0 -bottom-0.5 border-b border-white w-full origin-left scale-x-0" />
               </div>
 
               <span>/</span>
 
-              <div className="underline-link">
+              <div className="underline-link relative inline-block">
                 <button
                   type="button"
-                  className="underline-trigger inline-block"
+                  className="underline-trigger relative inline-block"
                   onClick={() => setViewMode("list")}
                 >
                   List
                 </button>
-                <div className="underline-line border-b border-white w-full origin-left scale-x-0 pt-1" />
+                <div className="underline-line absolute left-0 -bottom-0.5 border-b border-white w-full origin-left scale-x-0" />
               </div>
 
               <span>]</span>

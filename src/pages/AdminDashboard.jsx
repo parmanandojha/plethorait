@@ -186,9 +186,8 @@ function AdminDashboard() {
           <p className="text-3xl font-semibold mb-1">{blogs.length}</p>
           <p className="text-xs text-white/60">Items</p>
         </div>
-      </div>
 
-      <div className="bg-white/5 border border-white/10 rounded-md p-5">
+        <div className="bg-white/5 border border-white/10 rounded-md p-5">
           <h2 className="text-sm font-semibold mb-3 uppercase tracking-wide">
             Newsletter Subscribers
           </h2>
@@ -197,6 +196,17 @@ function AdminDashboard() {
           </p>
           <p className="text-3xl font-semibold mb-1">{subscribers.length}</p>
           <p className="text-xs text-white/60">Subscribers</p>
+        </div>
+
+        <div className="bg-white/5 border border-white/10 rounded-md p-5">
+          <h2 className="text-sm font-semibold mb-3 uppercase tracking-wide">
+            Consent metrics
+          </h2>
+          <p className="text-xs text-white/70 mb-4">
+            Location & device when cookies were accepted.
+          </p>
+          <p className="text-3xl font-semibold mb-1">{metrics.length}</p>
+          <p className="text-xs text-white/60">Records</p>
         </div>
       </div>
 
@@ -233,17 +243,7 @@ function AdminDashboard() {
             Download All Content
           </button>
         </div>
-
-        <div className="bg-white/5 border border-white/10 rounded-md p-5">
-          <h2 className="text-sm font-semibold mb-3 uppercase tracking-wide">
-            Consent metrics
-          </h2>
-          <p className="text-xs text-white/70 mb-4">
-            Location & device when cookies were accepted.
-          </p>
-          <p className="text-3xl font-semibold mb-1">{metrics.length}</p>
-          <p className="text-xs text-white/60">Records</p>
-        </div>
+      </div>
 
       <p className="text-xs text-white/60">
         Note: This admin portal is a prototype. These entries are stored only in
