@@ -7,6 +7,25 @@ const BLOGS_KEY = "plethora_admin_blogs";
 const SUBS_KEY = "plethora_subscribers";
 const METRICS_KEY = "plethora_consent_metrics";
 
+function downloadJson(filename, data) {
+  try {
+    const json = JSON.stringify(data, null, 2);
+    const blob = new Blob([json], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  } catch (err) {
+    // Silent failure – this is a convenience export helper
+    // and should not break the dashboard.
+    console.error("Failed to download JSON", err);
+  }
+}
+
 function readLocalArray(key) {
   try {
     const raw = localStorage.getItem(key);
@@ -179,6 +198,41 @@ function AdminDashboard() {
           <p className="text-3xl font-semibold mb-1">{subscribers.length}</p>
           <p className="text-xs text-white/60">Subscribers</p>
         </div>
+      </div>
+
+      <div className="bg-white/5 border border-white/10 rounded-md p-5 space-y-3 text-xs">
+        <h2 className="text-sm font-semibold mb-1 uppercase tracking-wide">
+          Export data as JSON
+        </h2>
+        <p className="text-white/70">
+          Download the latest drafts from this browser as JSON files for backup
+          or to use them in your codebase / backend.
+        </p>
+        <div className="flex flex-wrap gap-3 mt-2">
+          <button
+            type="button"
+            onClick={() => downloadJson("work.json", projects)}
+            className="px-3 py-1.5 bg-white text-black rounded font-semibold hover:bg-[#f5f5f5] transition-colors"
+          >
+            Download Work JSON
+          </button>
+          <button
+            type="button"
+            onClick={() => downloadJson("blogs.json", blogs)}
+            className="px-3 py-1.5 bg-white text-black rounded font-semibold hover:bg-[#f5f5f5] transition-colors"
+          >
+            Download Blogs JSON
+          </button>
+          <button
+            type="button"
+            onClick={() =>
+              downloadJson("plethora-content.json", { projects, blogs })
+            }
+            className="px-3 py-1.5 bg-white text-black rounded font-semibold hover:bg-[#f5f5f5] transition-colors"
+          >
+            Download All Content
+          </button>
+        </div>
 
         <div className="bg-white/5 border border-white/10 rounded-md p-5">
           <h2 className="text-sm font-semibold mb-3 uppercase tracking-wide">
@@ -193,8 +247,9 @@ function AdminDashboard() {
 
       <p className="text-xs text-white/60">
         Note: This admin portal is a prototype. These entries are stored only in
-        your browser (localStorage) and are not yet connected to the live site
-        data. They&apos;re useful for planning and drafting content.
+        your browser (localStorage). Use the export buttons above to save them
+        into JSON files that you can commit to your repo or feed into a Node.js
+        script / backend.
       </p>
     </div>
   );
