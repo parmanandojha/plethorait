@@ -105,7 +105,7 @@ function Navbar() {
 
         {/* Desktop / tablet: current menu (visible from md up) */}
         <div className="w-1/2 hidden md:flex justify-between items-start">
-          <div className="flex flex-col gap-1 uppercase text-[clamp(0.7rem,1.5vw,0.85rem)]">
+          <div className="flex flex-col gap-1 uppercase text-[0.8rem]">
             {navLinks.map(({ to, label }) => (
               <div key={to} className="nav-link-group cursor-pointer">
                 <div className="inline-block">
