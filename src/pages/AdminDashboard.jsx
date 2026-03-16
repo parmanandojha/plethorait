@@ -7,6 +7,8 @@ const BLOGS_KEY = "plethora_admin_blogs";
 const SUBS_KEY = "plethora_subscribers";
 const METRICS_KEY = "plethora_consent_metrics";
 
+const API_BASE = import.meta.env.VITE_API_BASE_URL || "";
+
 function downloadJson(filename, data) {
   try {
     const json = JSON.stringify(data, null, 2);
@@ -75,8 +77,26 @@ function AdminDashboard() {
       return;
     }
 
-    setProjects(readLocalArray(PROJECTS_KEY));
-    setBlogs(readLocalArray(BLOGS_KEY));
+    // Load from backend if configured, otherwise fall back to localStorage
+    if (API_BASE) {
+      Promise.all([
+        fetch(`${API_BASE}/api/projects`).then((r) => r.json()),
+        fetch(`${API_BASE}/api/blogs`).then((r) => r.json())
+      ])
+        .then(([remoteProjects, remoteBlogs]) => {
+          setProjects(Array.isArray(remoteProjects) ? remoteProjects : []);
+          setBlogs(Array.isArray(remoteBlogs) ? remoteBlogs : []);
+          writeLocalArray(PROJECTS_KEY, remoteProjects || []);
+          writeLocalArray(BLOGS_KEY, remoteBlogs || []);
+        })
+        .catch(() => {
+          setProjects(readLocalArray(PROJECTS_KEY));
+          setBlogs(readLocalArray(BLOGS_KEY));
+        });
+    } else {
+      setProjects(readLocalArray(PROJECTS_KEY));
+      setBlogs(readLocalArray(BLOGS_KEY));
+    }
     setSubscribers(readLocalArray(SUBS_KEY));
     setMetrics(readLocalArray(METRICS_KEY));
   }, [navigate]);
@@ -86,26 +106,41 @@ function AdminDashboard() {
     navigate("/admin/login", { replace: true });
   };
 
-  const handleProjectSubmit = (e) => {
+  const handleProjectSubmit = async (e) => {
     e.preventDefault();
     if (!projectForm.name || !projectForm.description) return;
 
-    if (editingProjectId) {
-      const updated = projects.map((p) =>
-        p.id === editingProjectId ? { ...p, ...projectForm } : p
-      );
-      setProjects(updated);
-      writeLocalArray(PROJECTS_KEY, updated);
+    const basePayload = {
+      ...projectForm,
+      id: editingProjectId || `work-${Date.now()}`
+    };
+
+    if (API_BASE) {
+      try {
+        const saved = await fetch(`${API_BASE}/api/projects`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(basePayload)
+        }).then((r) => r.json());
+
+        setProjects((prev) => {
+          const rest = prev.filter((p) => p.id !== saved.id);
+          const nextArr = [saved, ...rest];
+          writeLocalArray(PROJECTS_KEY, nextArr);
+          return nextArr;
+        });
+      } catch {
+        // Fallback: update only locally if API fails
+        const updated = projects.filter((p) => p.id !== basePayload.id);
+        const nextArr = [basePayload, ...updated];
+        setProjects(nextArr);
+        writeLocalArray(PROJECTS_KEY, nextArr);
+      }
     } else {
-      const next = [
-        {
-          ...projectForm,
-          id: `work-${Date.now()}`
-        },
-        ...projects
-      ];
-      setProjects(next);
-      writeLocalArray(PROJECTS_KEY, next);
+      const updated = projects.filter((p) => p.id !== basePayload.id);
+      const nextArr = [basePayload, ...updated];
+      setProjects(nextArr);
+      writeLocalArray(PROJECTS_KEY, nextArr);
     }
 
     setEditingProjectId(null);
@@ -117,26 +152,40 @@ function AdminDashboard() {
     });
   };
 
-  const handleBlogSubmit = (e) => {
+  const handleBlogSubmit = async (e) => {
     e.preventDefault();
     if (!blogForm.title || !blogForm.content) return;
 
-    if (editingBlogId) {
-      const updated = blogs.map((b) =>
-        b.id === editingBlogId ? { ...b, ...blogForm } : b
-      );
-      setBlogs(updated);
-      writeLocalArray(BLOGS_KEY, updated);
+    const basePayload = {
+      ...blogForm,
+      id: editingBlogId || `blog-${Date.now()}`
+    };
+
+    if (API_BASE) {
+      try {
+        const saved = await fetch(`${API_BASE}/api/blogs`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(basePayload)
+        }).then((r) => r.json());
+
+        setBlogs((prev) => {
+          const rest = prev.filter((b) => b.id !== saved.id);
+          const nextArr = [saved, ...rest];
+          writeLocalArray(BLOGS_KEY, nextArr);
+          return nextArr;
+        });
+      } catch {
+        const updated = blogs.filter((b) => b.id !== basePayload.id);
+        const nextArr = [basePayload, ...updated];
+        setBlogs(nextArr);
+        writeLocalArray(BLOGS_KEY, nextArr);
+      }
     } else {
-      const next = [
-        {
-          ...blogForm,
-          id: `blog-${Date.now()}`
-        },
-        ...blogs
-      ];
-      setBlogs(next);
-      writeLocalArray(BLOGS_KEY, next);
+      const updated = blogs.filter((b) => b.id !== basePayload.id);
+      const nextArr = [basePayload, ...updated];
+      setBlogs(nextArr);
+      writeLocalArray(BLOGS_KEY, nextArr);
     }
 
     setEditingBlogId(null);

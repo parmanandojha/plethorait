@@ -1,23 +1,50 @@
 import React, { useEffect, useState } from "react";
 import AnimatedLink from "../components/AnimatedLink.jsx";
 
-function getAdminBlogs() {
-  if (typeof window === "undefined") return [];
-  try {
-    const raw = window.localStorage.getItem("plethora_admin_blogs");
-    if (!raw) return [];
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed : [];
-  } catch {
-    return [];
-  }
-}
+const API_BASE = import.meta.env.VITE_API_BASE_URL || "";
 
 function BlogList() {
   const [blogs, setBlogs] = useState([]);
 
   useEffect(() => {
-    setBlogs(getAdminBlogs());
+    if (API_BASE) {
+      fetch(`${API_BASE}/api/blogs`)
+        .then((r) => r.json())
+        .then((data) => {
+          if (Array.isArray(data)) {
+            setBlogs(data);
+          } else {
+            setBlogs([]);
+          }
+        })
+        .catch(() => {
+          // Fallback to localStorage cache if API fails
+          try {
+            const raw = window.localStorage.getItem("plethora_admin_blogs");
+            if (!raw) {
+              setBlogs([]);
+              return;
+            }
+            const parsed = JSON.parse(raw);
+            setBlogs(Array.isArray(parsed) ? parsed : []);
+          } catch {
+            setBlogs([]);
+          }
+        });
+    } else {
+      // No backend configured: use localStorage only
+      try {
+        const raw = window.localStorage.getItem("plethora_admin_blogs");
+        if (!raw) {
+          setBlogs([]);
+          return;
+        }
+        const parsed = JSON.parse(raw);
+        setBlogs(Array.isArray(parsed) ? parsed : []);
+      } catch {
+        setBlogs([]);
+      }
+    }
   }, []);
 
   return (
