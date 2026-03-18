@@ -14,7 +14,7 @@ function ContactHero() {
           <div className=" flex flex-col gap-8 w-full sm:w-1/2">
             <div className="flex flex-col">
               <div className="text-[clamp(1.125rem,2.5vw,1.8rem)]  mb-2">For projects inquiries</div>
-              <a href="#" className="underline text-[1rem] sm:text-[0.8rem] tracking-wide break-all">
+              <a href="mailto:connect@plethorait.com" className="underline text-[1rem] sm:text-[0.8rem] tracking-wide break-all">
                 CONNECT@PLETHORAIT.COM
               </a>
             </div>
@@ -27,7 +27,7 @@ function ContactHero() {
           </div>
           <div className="flex flex-col">
             <div className="text-[clamp(1.125rem,2.5vw,1.8rem)] mb-2">For Jobs and internships</div>
-            <a href="#" className="underline uppercase text-[1rem] sm:text-[0.8rem] tracking-wide break-all">
+            <a href="mailto:jobs@plethorait.com" className="underline uppercase text-[1rem] sm:text-[0.8rem] tracking-wide break-all">
               Jobs@plethorait.com
             </a>
           </div>
