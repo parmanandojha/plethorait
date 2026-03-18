@@ -3,13 +3,16 @@ import {
   setupProjectCursorFollow,
   setupWorkListHoverImage
 } from "../animations/gsapAnimations.js";
-import { projects } from "../data/projects.js";
 import AnimatedLink from "../components/AnimatedLink.jsx";
+import { useProjectsData } from "../hooks/useProjectsData.js";
 
 function Work() {
   const [viewMode, setViewMode] = useState("grid"); // "grid" | "list"
+  const { projects, loading, error } = useProjectsData();
 
   useEffect(() => {
+    if (loading || !projects.length) return undefined;
+
     if (viewMode === "grid") {
       const cleanupFollow = setupProjectCursorFollow();
       return () => {
@@ -25,7 +28,25 @@ function Work() {
     }
 
     return undefined;
-  }, [viewMode]);
+  }, [viewMode, loading, projects.length]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center px-4 sm:px-6">
+        <p className="text-[clamp(0.875rem,1.5vw,1rem)]">Loading projects…</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center px-4 sm:px-6">
+        <p className="text-[clamp(0.875rem,1.5vw,1rem)]">
+          Failed to load projects.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -79,9 +100,13 @@ function Work() {
                 className="featured-card relative h-[60vh] sm:h-[80vh] bg-cover bg-center p-4 sm:p-6 overflow-hidden"
                 style={{ backgroundImage: `url("${project.thumbnailImage}")` }}
               >
-                <h3 className="text-[clamp(1.125rem,2.5vw,1.5rem)] pb-2">{project.title}</h3>
+                <h3 className="text-[clamp(1.125rem,2.5vw,1.5rem)] pb-1">
+                  {project.title}
+                </h3>
 
-                <p className="text-[clamp(0.875rem,1.5vw,1rem)]">{project.subtitle}</p>
+                <p className="text-[clamp(0.875rem,1.5vw,1rem)]">
+                  {project.subtitle}
+                </p>
 
                 <div className="project-follow mt-4 text-[clamp(0.7rem,1.5vw,0.8rem)] pointer-events-none">
                   [ View Project ]
@@ -102,7 +127,9 @@ function Work() {
                 />
                 <div className="flex-1 flex flex-col justify-between">
                   <div>
-                    <h3 className="text-[clamp(1.125rem,2.5vw,1.5rem)] pb-2">{project.title}</h3>
+                    <h3 className="text-[clamp(1.125rem,2.5vw,1.5rem)] pb-1">
+                      {project.title}
+                    </h3>
                     <p className="text-[clamp(0.875rem,1.5vw,1rem)] text-white/80">
                       {project.subtitle}
                     </p>

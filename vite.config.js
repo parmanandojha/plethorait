@@ -3,7 +3,6 @@ import react from "@vitejs/plugin-react-swc";
 
 export default defineConfig({
   plugins: [react()],
-  publicDir: "img",
   build: {
     rollupOptions: {
       input: "index.html"

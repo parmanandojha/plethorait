@@ -1,10 +1,29 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import { projects } from "../data/projects.js";
+import { useProjectsData } from "../hooks/useProjectsData.js";
 
 function ProjectDetail() {
   const { slug } = useParams();
+  const { projects, loading, error } = useProjectsData();
   const project = projects.find((p) => p.slug === slug);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center px-4 sm:px-6">
+        <p className="text-[clamp(0.875rem,1.5vw,1rem)]">Loading project…</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center px-4 sm:px-6">
+        <p className="text-[clamp(0.875rem,1.5vw,1rem)]">
+          Failed to load project.
+        </p>
+      </div>
+    );
+  }
 
   if (!project) {
     return (
@@ -22,9 +41,6 @@ function ProjectDetail() {
       >
         <div className="absolute inset-0 bg-black/40" />
         <div className="relative h-full flex flex-col justify-end px-4 sm:px-6 pb-[8vh] sm:pb-[12vh]">
-          <div className="text-[clamp(0.8rem,1.5vw,1rem)] uppercase mb-3 sm:mb-4">
-            {project.category} — {project.year}
-          </div>
           <h1 className="text-[clamp(2rem,6vw,5rem)] mb-3 sm:mb-4">
             {project.title}
           </h1>
@@ -58,6 +74,18 @@ function ProjectDetail() {
           ))}
         </div>
       </section>
+
+      {project.gallery && project.gallery.length > 0 && (
+        <section className=" pb-[12vh]">
+          {project.gallery.map((src) => (
+            <div
+              key={src}
+              className="w-full h-[100vh] bg-cover bg-center"
+              style={{ backgroundImage: `url("${src}")` }}
+            />
+          ))}
+        </section>
+      )}
     </>
   );
 }

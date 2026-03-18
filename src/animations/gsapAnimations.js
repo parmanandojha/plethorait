@@ -183,7 +183,10 @@ export function statementScrollAnimation() {
   });
 
   // Ensure projects section is not offset from previous animations
-  gsap.set("#projectsSection", { clearProps: "transform" });
+  const projectsSection = document.querySelector("#projectsSection");
+  if (projectsSection) {
+    gsap.set(projectsSection, { clearProps: "transform" });
+  }
 
   const tl = gsap.timeline({
     scrollTrigger: {

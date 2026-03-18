@@ -1,24 +1,22 @@
 import React, { useEffect, useState } from "react";
 import AnimatedLink from "../AnimatedLink.jsx";
 
-function getAdminBlogs() {
-  if (typeof window === "undefined") return [];
-  try {
-    const raw = window.localStorage.getItem("plethora_admin_blogs");
-    if (!raw) return [];
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed : [];
-  } catch {
-    return [];
-  }
-}
-
 function BlogsSection() {
   const [featured, setFeatured] = useState([]);
 
   useEffect(() => {
-    const all = getAdminBlogs();
-    setFeatured(all.slice(0, 3));
+    fetch("/blogs.json")
+      .then((r) => r.json())
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setFeatured(data.slice(0, 3));
+        } else {
+          setFeatured([]);
+        }
+      })
+      .catch(() => {
+        setFeatured([]);
+      });
   }, []);
 
   return (

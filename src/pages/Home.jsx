@@ -8,17 +8,26 @@ import FeatureProjectsSection from "../components/home/FeatureProjectsSection.js
 import StatementSection from "../components/home/StatementSection.jsx";
 import HomeProjectsGrid from "../components/home/HomeProjectsGrid.jsx";
 import BlogsSection from "../components/home/BlogsSection.jsx";
+import { useProjectsData } from "../hooks/useProjectsData.js";
 
 function Home() {
-  useEffect(() => {
-    const cleanupFollow = setupProjectCursorFollow();
-    const cleanupStatement = statementScrollAnimation();
+  const { projects } = useProjectsData();
 
+  useEffect(() => {
+    const cleanupStatement = statementScrollAnimation();
     return () => {
-      if (cleanupFollow) cleanupFollow();
       if (cleanupStatement) cleanupStatement();
     };
   }, []);
+
+  useEffect(() => {
+    if (!projects.length) return undefined;
+
+    const cleanupFollow = setupProjectCursorFollow();
+    return () => {
+      if (cleanupFollow) cleanupFollow();
+    };
+  }, [projects.length]);
 
   return (
     <>

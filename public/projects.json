@@ -1,0 +1,188 @@
+[
+  {
+    "id": "mervyns",
+    "slug": "mervyns",
+    "title": "Mervyn’s",
+    "subtitle": "Campaign & Photography",
+    "category": "Campaign",
+    "services": ["Campaign", "Photography"],
+    "heroImage": "/mervyns/project-mervyns-1.png",
+    "thumbnailImage": "/mervyns/project-mervyns-1.png",
+    "year": "2024",
+    "client": "Mervyn’s",
+    "location": "Bangkok, Thailand",
+    "description": "A campaign and photography project focused on crafting a bold visual narrative for Mervyn’s.",
+    "body": [
+      "We collaborated with the client to define a visual language aligned with their brand story.",
+      "The campaign assets were designed for multi-channel usage including social, web, and print."
+    ],
+    "gallery": [
+      "/mervyns/project-mervyns-1.png",
+      "/mervyns/project-mervyns-2.png",
+      "/mervyns/project-mervyns-3.png",
+      "/mervyns/project-mervyns-4.png",
+      "/mervyns/project-mervyns-5.png",
+      "/mervyns/project-mervyns-6.png",
+      "/mervyns/project-mervyns-7.png",
+      "/mervyns/project-mervyns-8.png"
+    ]
+  },
+  {
+    "id": "narasha",
+    "slug": "narasha",
+    "title": "Narasha",
+    "subtitle": "Website Ecommerce & Photography",
+    "category": "E‑commerce",
+    "services": ["Website", "E‑commerce", "Photography"],
+    "heroImage": "/narasha/project-narasha-1.png",
+    "thumbnailImage": "/narasha/project-narasha-1.png",
+    "year": "2024",
+    "client": "Narasha",
+    "location": "Bangkok, Thailand",
+    "description": "An e‑commerce and photography engagement creating a seamless buying experience supported by strong visuals.",
+    "body": [
+      "We designed and developed an experience optimized for conversion and brand storytelling.",
+      "Photography was art-directed to highlight both product details and lifestyle usage."
+    ],
+    "gallery": [
+      "/narasha/project-narasha-1.png",
+      "/narasha/project-narasha-2.png",
+      "/narasha/project-narasha-3.png",
+      "/narasha/project-narasha-4.png",
+      "/narasha/project-narasha-5.png",
+      "/narasha/project-narasha-6.png",
+      "/narasha/project-narasha-7.png",
+      "/narasha/project-narasha-8.png"
+    ]
+  },
+  {
+    "id": "butter-me-up",
+    "slug": "butter-me-up",
+    "title": "Butter me up",
+    "subtitle": "Photography",
+    "category": "Photography",
+    "services": ["Photography"],
+    "heroImage": "/buttermeup/project-buttermeup-1.png",
+    "thumbnailImage": "/buttermeup/project-buttermeup-1.png",
+    "year": "2023",
+    "client": "Butter me up",
+    "location": "Bangkok, Thailand",
+    "description": "A photography-focused project capturing the playful and appetizing character of the brand.",
+    "body": [
+      "We developed a visual system that makes the product feel tactile and craveable.",
+      "Lighting and composition were tuned to highlight textures and colors."
+    ],
+    "gallery": [
+      "/buttermeup/project-buttermeup-1.png",
+      "/buttermeup/project-buttermeup-2.png",
+      "/buttermeup/project-buttermeup-3.png",
+      "/buttermeup/project-buttermeup-4.png",
+      "/buttermeup/project-buttermeup-5.png",
+      "/buttermeup/project-buttermeup-6.png",
+      "/buttermeup/project-buttermeup-7.png",
+      "/buttermeup/project-buttermeup-8.png",
+      "/buttermeup/project-buttermeup-9.png"
+    ]
+  },
+  {
+    "id": "snoops-joint",
+    "slug": "snoops-joint",
+    "title": "Snoop’s Joint",
+    "subtitle": "Campaign & Photography",
+    "category": "Campaign",
+    "services": ["Campaign", "Photography"],
+    "heroImage": "/snoopjoints/project-snoopjoints-1.png",
+    "thumbnailImage": "/snoopjoints/project-snoopjoints-1.png",
+    "year": "2023",
+    "client": "Snoop’s Joint",
+    "location": "Bangkok, Thailand",
+    "description": "A campaign and photography project building a vivid, character-driven world for Snoop’s Joint.",
+    "body": [
+      "We created a campaign system that works across outdoor, digital, and in‑store touchpoints.",
+      "Photography pushed a cinematic, atmospheric direction while remaining product-focused."
+    ],
+    "gallery": [
+      "/snoopjoints/project-snoopjoints-1.png",
+      "/snoopjoints/project-snoopjoints-2.png",
+      "/snoopjoints/project-snoopjoints-3.png",
+      "/snoopjoints/project-snoopjoints-4.png",
+      "/snoopjoints/project-snoopjoints-5.png",
+      "/snoopjoints/project-snoopjoints-6.png",
+      "/snoopjoints/project-snoopjoints-7.png",
+      "/snoopjoints/project-snoopjoints-8.png"
+    ]
+  },
+  {
+    "id": "mc-foods",
+    "slug": "mc-foods",
+    "title": "MC Foods",
+    "subtitle": "Campaign & Photography",
+    "category": "Campaign",
+    "services": ["Campaign", "Photography"],
+    "heroImage": "/mcfoods/project-mcfoods-1.png",
+    "thumbnailImage": "/mcfoods/project-mcfoods-1.png",
+    "year": "2022",
+    "client": "MC Foods",
+    "location": "Bangkok, Thailand",
+    "description": "A campaign and photography initiative highlighting MC Foods’ range through bold, appetizing imagery.",
+    "body": [
+      "We created key visuals and supporting assets for both retail and digital campaigns.",
+      "The photography direction focused on freshness, color, and clarity of product presentation."
+    ],
+    "gallery": [
+      "/mcfoods/project-mcfoods-1.png",
+      "/mcfoods/project-mcfoods-2.png",
+      "/mcfoods/project-mcfoods-3.png",
+      "/mcfoods/project-mcfoods-4.png",
+      "/mcfoods/project-mcfoods-5.png",
+      "/mcfoods/project-mcfoods-6.png",
+      "/mcfoods/project-mcfoods-7.png",
+      "/mcfoods/project-mcfoods-8.png",
+      "/mcfoods/project-mcfoods-9.png"
+    ]
+  },
+  {
+    "id": "flora-capital",
+    "slug": "flora-capital",
+    "title": "Flora Capital",
+    "subtitle": "Magzine Design",
+    "category": "Editorial",
+    "services": ["Magazine Design"],
+    "heroImage": "/project-flora.png",
+    "thumbnailImage": "/project-flora.png",
+    "year": "2022",
+    "client": "Flora Capital",
+    "location": "Bangkok, Thailand",
+    "description": "Magazine design for Flora Capital, balancing editorial readability with a strong visual identity.",
+    "body": [
+      "We structured content layouts to support both quick scanning and deep reading.",
+      "Typography, grids, and imagery were tuned to convey trust, clarity, and modernity."
+    ]
+  },
+  {
+    "id": "smarttek",
+    "slug": "smarttek",
+    "title": "Smarttek",
+    "subtitle": "Website & Brand",
+    "category": "Website",
+    "services": ["Website", "Branding"],
+    "heroImage": "/smarttek/project-smarttek-1.png",
+    "thumbnailImage": "/smarttek/project-smarttek-1.png",
+    "year": "2024",
+    "client": "Smarttek",
+    "location": "Bangkok, Thailand",
+    "description": "A digital and brand project for Smarttek, focused on a sharp and modern online presence.",
+    "body": [
+      "We designed and built a responsive website to showcase Smarttek’s offerings.",
+      "Brand elements were refined to feel both technical and approachable."
+    ],
+    "gallery": [
+      "/smarttek/project-smarttek-1.png",
+      "/smarttek/project-smarttek-2.png",
+      "/smarttek/project-smarttek-3.png",
+      "/smarttek/project-smarttek-4.png",
+      "/smarttek/project-smarttek-5.png"
+    ]
+  }
+]
+
