@@ -62,7 +62,7 @@ function Preloader({ progress = 0, done = false, onComplete }) {
     <div ref={rootRef} className="fixed inset-0 z-[9998] pointer-events-none">
       <div
         ref={stairsRef}
-        className="absolute inset-0 flex h-full w-full bg-black"
+        className="absolute inset-0 flex h-full w-full"
       >
         <div className="preload-stair h-full w-1/6 bg-black" />
         <div className="preload-stair h-full w-1/6 bg-black" />

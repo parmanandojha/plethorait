@@ -35,14 +35,14 @@ function Footer() {
               </AnimatedLink>
             </div>
 
-            <div className="space-y-2">
-              <a className="block underline" href="#">
+            <div className="space-y-2 underline">
+              <a className="block" href="https://www.instagram.com/plethora.it/">
                 INSTAGRAM
               </a>
-              <a className="block underline" href="#">
+              <a className="block" href="https://www.linkedin.com/company/plethorainfotech/">
                 LINKEDIN
               </a>
-              <a className="block underline" href="#">
+              <a className="block" href="https://www.behance.net/vidushisingh7">
                 BEHANCE
               </a>
             </div>

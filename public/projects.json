@@ -11,7 +11,7 @@
     "year": "2024",
     "client": "Mervyn’s",
     "location": "Bangkok, Thailand",
-    "description": "A campaign and photography project focused on crafting a bold visual narrative for Mervyn’s.",
+    "description": "A campaign and photography project for Mervyn’s focused on creating a bold visual identity, striking key visuals, and versatile brand content for digital and print use.",
     "body": [
       "We collaborated with the client to define a visual language aligned with their brand story.",
       "The campaign assets were designed for multi-channel usage including social, web, and print."
@@ -39,7 +39,7 @@
     "year": "2024",
     "client": "Narasha",
     "location": "Bangkok, Thailand",
-    "description": "An e‑commerce and photography engagement creating a seamless buying experience supported by strong visuals.",
+    "description": "A full e-commerce and photography engagement for Narasha, combining a conversion-focused website experience with polished product and lifestyle imagery.",
     "body": [
       "We designed and developed an experience optimized for conversion and brand storytelling.",
       "Photography was art-directed to highlight both product details and lifestyle usage."
@@ -67,7 +67,7 @@
     "year": "2023",
     "client": "Butter me up",
     "location": "Bangkok, Thailand",
-    "description": "A photography-focused project capturing the playful and appetizing character of the brand.",
+    "description": "A photography-led project for Butter me up built around rich textures, playful composition, and imagery that makes the product feel fresh, tactile, and desirable.",
     "body": [
       "We developed a visual system that makes the product feel tactile and craveable.",
       "Lighting and composition were tuned to highlight textures and colors."
@@ -96,7 +96,7 @@
     "year": "2023",
     "client": "Snoop’s Joint",
     "location": "Bangkok, Thailand",
-    "description": "A campaign and photography project building a vivid, character-driven world for Snoop’s Joint.",
+    "description": "A campaign and photography project for Snoop’s Joint that blends strong visual storytelling, atmospheric styling, and memorable branded imagery across touchpoints.",
     "body": [
       "We created a campaign system that works across outdoor, digital, and in‑store touchpoints.",
       "Photography pushed a cinematic, atmospheric direction while remaining product-focused."
@@ -124,7 +124,7 @@
     "year": "2022",
     "client": "MC Foods",
     "location": "Bangkok, Thailand",
-    "description": "A campaign and photography initiative highlighting MC Foods’ range through bold, appetizing imagery.",
+    "description": "A campaign and photography project for MC Foods designed to showcase the range through appetizing visuals, clear product communication, and adaptable campaign assets.",
     "body": [
       "We created key visuals and supporting assets for both retail and digital campaigns.",
       "The photography direction focused on freshness, color, and clarity of product presentation."
@@ -148,15 +148,24 @@
     "subtitle": "Magzine Design",
     "category": "Editorial",
     "services": ["Magazine Design"],
-    "heroImage": "/project-flora.png",
-    "thumbnailImage": "/project-flora.png",
+    "heroImage": "/flora/project-flora-1.png",
+    "thumbnailImage": "/flora/project-flora-1.png",
     "year": "2022",
     "client": "Flora Capital",
     "location": "Bangkok, Thailand",
-    "description": "Magazine design for Flora Capital, balancing editorial readability with a strong visual identity.",
+    "description": "An editorial design project for Flora Capital focused on building a magazine experience that feels refined, readable, and aligned with the brand’s visual language.",
     "body": [
       "We structured content layouts to support both quick scanning and deep reading.",
       "Typography, grids, and imagery were tuned to convey trust, clarity, and modernity."
+    ],
+    "gallery": [
+      "/flora/project-flora-1.png",
+      "/flora/project-flora-2.png",
+      "/flora/project-flora-3.png",
+      "/flora/project-flora-4.png",
+      "/flora/project-flora-5.png",
+      "/flora/project-flora-6.png",
+      "/flora/project-flora-7.png"
     ]
   },
   {
@@ -171,7 +180,7 @@
     "year": "2024",
     "client": "Smarttek",
     "location": "Bangkok, Thailand",
-    "description": "A digital and brand project for Smarttek, focused on a sharp and modern online presence.",
+    "description": "A website and brand project for Smarttek focused on crafting a sharp digital presence, clearer communication, and a modern visual system that feels confident and scalable.",
     "body": [
       "We designed and built a responsive website to showcase Smarttek’s offerings.",
       "Brand elements were refined to feel both technical and approachable."

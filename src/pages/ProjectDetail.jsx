@@ -53,15 +53,15 @@ function ProjectDetail() {
       <section className="px-4 sm:px-6 py-[12vh] sm:py-[16vh] grid md:grid-cols-12 gap-8 sm:gap-12">
         <div className="md:col-span-4 space-y-4 text-[clamp(0.8rem,1.2vw,0.9rem)] uppercase">
           <div>
-            <div className="text-white/60">Client</div>
+            <div className="text-white/60 py-2">Client</div>
             <div>{project.client}</div>
           </div>
           <div>
-            <div className="text-white/60">Location</div>
+            <div className="text-white/60 py-2">Location</div>
             <div>{project.location}</div>
           </div>
           <div>
-            <div className="text-white/60">Services</div>
+            <div className="text-white/60 py-2">Services</div>
             <div>{project.services.join(", ")}</div>
           </div>
         </div>
