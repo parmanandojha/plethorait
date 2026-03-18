@@ -4,7 +4,7 @@ function ContactHero() {
   return (
     <div className="relative w-full bg-cover bg-center text-white">
       <div className="flex flex-col md:flex-row w-full justify-center items-center h-[80vh] my-auto p-4 sm:p-6 gap-10 md:gap-0">
-        <div className="w-full md:w-1/2 text-[clamp(1.125rem,4vw,1.8rem)] flex flex-col my-auto">
+        <div className="w-full md:w-1/2 text-[clamp(1.125rem,4vw,1.8rem)] flex flex-col">
           <div className="w-full md:w-[80%] flex flex-col items-start">
             Serving clients in the United States, Canada, Thailand, Singapore, and
             India as a Full-Service Digital Agency.

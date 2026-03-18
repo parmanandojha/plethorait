@@ -184,7 +184,7 @@ function Navbar() {
             className="absolute inset-0 flex flex-col leading-none  px-4 pb-4 justify-end text-white z-10 pointer-events-none"
           >
             <div
-              className="flex flex-col  uppercase text-[4rem] pointer-events-auto"
+              className="flex flex-col  uppercase text-[2.5rem] pointer-events-auto"
             >
               {navLinks.map(({ to, label }) => (
                 <AnimatedLink
