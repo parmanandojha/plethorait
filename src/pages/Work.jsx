@@ -53,7 +53,7 @@ function Work() {
       <div className="relative h-full pt-[12vh] sm:pt-[20vh]">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 px-4 sm:px-6 pb-[6vh] sm:pb-[8vh]">
           <div className="text-[clamp(2rem,5vw,4.8rem)] ">
-            <h3>Feature Projects</h3>
+            <h3>Works</h3>
           </div>
 
           <div className="flex flex-col gap-1 text-[clamp(0.7rem,1.5vw,0.8rem)] cursor-pointer">
@@ -115,36 +115,54 @@ function Work() {
             ))}
           </div>
         ) : (
-          <div className="px-4 sm:px-6 pb-[12vh] sm:pb-[20vh] space-y-8 sm:space-y-10">
-            {projects.map((project) => (
-              <div
-                key={project.id}
-                className="work-list-item flex flex-col md:flex-row gap-4 sm:gap-6 border-t border-white/20 pt-6 sm:pt-8"
-              >
-                <div
-                  className="work-list-image w-full md:w-1/3 h-[30vh] sm:h-[40vh] bg-cover bg-center"
-                  style={{ backgroundImage: `url("${project.thumbnailImage}")` }}
-                />
-                <div className="flex-1 flex flex-col justify-between">
-                  <div>
-                    <h3 className="text-[clamp(1.125rem,2.5vw,1.5rem)] pb-1">
+          <div className="relative px-4 sm:px-6 pb-[12vh] sm:pb-[20vh]">
+            <div className="border-t border-white/20">
+              <div className="hidden md:grid grid-cols-12 text-[0.65rem] uppercase tracking-[0.18em] text-white/50 py-4 border-b border-white/10">
+                <div className="col-span-5">Name</div>
+                <div className="col-span-2">Year</div>
+                <div className="col-span-5">Services</div>
+              </div>
+
+              {projects.map((project) => (
+                <AnimatedLink
+                  key={project.id}
+                  to={`/project/${project.slug}`}
+                  className="work-list-item grid grid-cols-1 md:grid-cols-12 gap-3 md:gap-0 py-6 sm:py-8 border-b border-white/10 cursor-pointer group"
+                  data-image={project.thumbnailImage}
+                >
+                  <div className="col-span-5">
+                    <h3 className="text-[clamp(2rem,4.2vw,3.6rem)] leading-none text-white/70 group-hover:text-white transition-colors duration-300">
                       {project.title}
                     </h3>
-                    <p className="text-[clamp(0.875rem,1.5vw,1rem)] text-white/80">
-                      {project.subtitle}
-                    </p>
                   </div>
-                  <div className="mt-4 text-[clamp(0.7rem,1.5vw,0.8rem)]">
-                    <AnimatedLink
-                      to={`/project/${project.slug}`}
-                      className="underline cursor-pointer"
-                    >
-                      [ View Project ]
-                    </AnimatedLink>
+
+                  <div className="col-span-2 text-[clamp(0.82rem,1.1vw,1rem)] text-white/75">
+                    <span className="md:hidden text-white/45 uppercase text-[0.62rem] tracking-[0.16em] mr-2">
+                      Year:
+                    </span>
+                    {project.year}
                   </div>
+
+                  <div className="col-span-5 text-[clamp(0.82rem,1.1vw,1rem)] text-white/75">
+                    <span className="md:hidden text-white/45 uppercase text-[0.62rem] tracking-[0.16em] mr-2">
+                      Services:
+                    </span>
+                    {project.services.join(", ")}
+                  </div>
+                </AnimatedLink>
+              ))}
+            </div>
+
+            <div className="work-list-follower fixed top-0 left-0 z-40 hidden md:block pointer-events-none opacity-0 will-change-transform">
+              <div className="relative w-[220px] h-[280px] rounded-xl overflow-hidden bg-white/10 border border-white/15 shadow-[0_20px_60px_rgba(0,0,0,0.4)]">
+                <div className="work-list-follower-image absolute inset-0 bg-cover bg-center will-change-transform" />
+                <div className="absolute inset-x-0 bottom-4 flex justify-center">
+                  <span className="bg-white text-black text-xs px-4 py-2 rounded-md">
+                    View case
+                  </span>
                 </div>
               </div>
-            ))}
+            </div>
           </div>
         )}
       </section>

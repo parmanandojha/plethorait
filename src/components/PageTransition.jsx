@@ -68,7 +68,14 @@ function PageTransition({ children }) {
       const exitTl = gsap.timeline({
         onComplete: () => {
           navigate(to);
-          window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+          if (window.__locomotiveScroll?.scrollTo) {
+            window.__locomotiveScroll.scrollTo(0, {
+              duration: 0,
+              disableLerp: true
+            });
+          } else {
+            window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+          }
 
           pendingEntryRef.current = window.setTimeout(() => {
             const newPage = pageRef.current;

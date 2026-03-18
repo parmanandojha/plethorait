@@ -3,10 +3,84 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export function initSmoothScroll() {
-  // Use default window scrolling, just ensure triggers are refreshed.
-  ScrollTrigger.refresh();
+export function initSmoothScroll(scrollContainer) {
+  if (typeof window === "undefined" || !scrollContainer) {
+    ScrollTrigger.refresh();
+    return () => {
+      ScrollTrigger.getAll().forEach((t) => t.kill());
+    };
+  }
+
+  let locomotive = null;
+  let cancelled = false;
+  const previousDefaults = ScrollTrigger.defaults();
+  const onRefresh = () => {
+    if (locomotive) locomotive.update();
+  };
+
+  const setup = async () => {
+    try {
+      const { default: LocomotiveScroll } = await import("locomotive-scroll");
+      if (cancelled) return;
+
+      locomotive = new LocomotiveScroll({
+        el: scrollContainer,
+        smooth: true,
+        lerp: 0.08,
+        smartphone: { smooth: true },
+        tablet: { smooth: true }
+      });
+
+      window.__locomotiveScroll = locomotive;
+
+      locomotive.on("scroll", ScrollTrigger.update);
+
+      ScrollTrigger.scrollerProxy(scrollContainer, {
+        scrollTop(value) {
+          if (arguments.length && locomotive) {
+            locomotive.scrollTo(value, { duration: 0, disableLerp: true });
+          }
+          return locomotive?.scroll?.instance?.scroll?.y || 0;
+        },
+        getBoundingClientRect() {
+          return {
+            top: 0,
+            left: 0,
+            width: window.innerWidth,
+            height: window.innerHeight
+          };
+        },
+        pinType: scrollContainer.style.transform ? "transform" : "fixed"
+      });
+
+      ScrollTrigger.defaults({
+        ...previousDefaults,
+        scroller: scrollContainer
+      });
+
+      ScrollTrigger.addEventListener("refresh", onRefresh);
+
+      ScrollTrigger.refresh();
+      if (locomotive) locomotive.update();
+    } catch {
+      ScrollTrigger.refresh();
+    }
+  };
+
+  setup();
+
   return () => {
+    cancelled = true;
+    if (window.__locomotiveScroll) {
+      delete window.__locomotiveScroll;
+    }
+    ScrollTrigger.defaults(previousDefaults);
+    ScrollTrigger.clearScrollMemory();
+    ScrollTrigger.removeEventListener("refresh", onRefresh);
+    if (locomotive) {
+      locomotive.destroy();
+      locomotive = null;
+    }
     ScrollTrigger.getAll().forEach((t) => t.kill());
   };
 }
@@ -210,28 +284,67 @@ export function statementScrollAnimation() {
 
 export function setupWorkListHoverImage() {
   const items = Array.from(document.querySelectorAll(".work-list-item"));
-  const cleanups = [];
+  const follower = document.querySelector(".work-list-follower");
+  const followerImage = follower?.querySelector(".work-list-follower-image");
 
-  items.forEach((item) => {
-    const image = item.querySelector(".work-list-image");
-    if (!image) return;
+  if (!items.length || !follower || !followerImage) return null;
 
-    gsap.set(image, { opacity: 0, y: 20 });
+  // Warm image cache for smoother first hover.
+  const imageSet = new Set(
+    items.map((item) => item.getAttribute("data-image")).filter(Boolean)
+  );
+  imageSet.forEach((src) => {
+    const img = new Image();
+    img.src = src;
+  });
 
-    const onEnter = () => {
-      gsap.to(image, {
+  let active = false;
+  let currentX = 0;
+  let currentY = 0;
+  let targetX = 0;
+  let targetY = 0;
+
+  const tick = () => {
+    currentX += (targetX - currentX) * 0.2;
+    currentY += (targetY - currentY) * 0.2;
+    follower.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
+  };
+  gsap.ticker.add(tick);
+
+  const moveFollower = (e) => {
+    if (!active) return;
+    targetX = e.clientX - 110;
+    targetY = e.clientY - 140;
+  };
+
+  const onWindowMove = (e) => moveFollower(e);
+  window.addEventListener("mousemove", onWindowMove, { passive: true });
+
+  const cleanups = items.map((item) => {
+    const image = item.getAttribute("data-image");
+
+    const onEnter = (e) => {
+      active = true;
+      if (image) {
+        gsap.set(followerImage, {
+          backgroundImage: `url("${image}")`
+        });
+      }
+      moveFollower(e);
+      gsap.to(follower, {
         opacity: 1,
-        y: 0,
-        duration: 0.5,
-        ease: "power3.out"
+        scale: 1,
+        duration: 0.18,
+        ease: "power2.out"
       });
     };
 
     const onLeave = () => {
-      gsap.to(image, {
+      active = false;
+      gsap.to(follower, {
         opacity: 0,
-        y: 20,
-        duration: 0.4,
+        scale: 0.95,
+        duration: 0.16,
         ease: "power2.inOut"
       });
     };
@@ -239,13 +352,17 @@ export function setupWorkListHoverImage() {
     item.addEventListener("mouseenter", onEnter);
     item.addEventListener("mouseleave", onLeave);
 
-    cleanups.push(() => {
+    return () => {
       item.removeEventListener("mouseenter", onEnter);
       item.removeEventListener("mouseleave", onLeave);
-    });
+    };
   });
 
+  gsap.set(follower, { opacity: 0, scale: 0.95 });
+
   return () => {
+    gsap.ticker.remove(tick);
+    window.removeEventListener("mousemove", onWindowMove);
     cleanups.forEach((fn) => fn());
   };
 }

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
@@ -24,13 +24,16 @@ import {
 function App() {
   const location = useLocation();
   const imagesReady = useImagePreloader();
+  const scrollContainerRef = useRef(null);
 
   useEffect(() => {
-    const destroySmoothScroll = initSmoothScroll();
+    if (!imagesReady) return undefined;
+
+    const destroySmoothScroll = initSmoothScroll(scrollContainerRef.current);
     return () => {
       if (destroySmoothScroll) destroySmoothScroll();
     };
-  }, []);
+  }, [imagesReady]);
 
   useEffect(() => {
     const cleanupUnderline = setupUnderlineHover();
@@ -50,18 +53,20 @@ function App() {
     <div>
       <ScrollProgress />
       <PageTransition>
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/work" element={<Work />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/project/:slug" element={<ProjectDetail />} />
-          <Route path="/blog" element={<BlogList />} />
-          <Route path="/blog/:slug" element={<BlogDetail />} />
-          <Route path="/privacy-policy" element={<PolicyPage />} />
-        </Routes>
-        <Footer />
+        <div ref={scrollContainerRef} data-scroll-container>
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/work" element={<Work />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/project/:slug" element={<ProjectDetail />} />
+            <Route path="/blog" element={<BlogList />} />
+            <Route path="/blog/:slug" element={<BlogDetail />} />
+            <Route path="/privacy-policy" element={<PolicyPage />} />
+          </Routes>
+          <Footer />
+        </div>
       </PageTransition>
       <ConsentBanner />
     </div>
