@@ -11,7 +11,7 @@ function ContactHero() {
           </div>
         </div>
         <div className="w-full md:w-1/2 flex flex-col sm:flex-row justify-between gap-8 sm:gap-4">
-          <div className=" flex flex-col gap-8 w-1/2">
+          <div className=" flex flex-col gap-8 w-full sm:w-1/2">
             <div className="flex flex-col">
               <div className="text-[clamp(1.125rem,2.5vw,1.8rem)]  mb-2">For projects inquiries</div>
               <a href="#" className="underline text-[1rem] sm:text-[0.8rem] tracking-wide break-all">
