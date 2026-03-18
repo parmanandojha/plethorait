@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { gsap } from "gsap";
 import {
   setupProjectCursorFollow,
   setupWorkListHoverImage
@@ -8,7 +9,31 @@ import { useProjectsData } from "../hooks/useProjectsData.js";
 
 function Work() {
   const [viewMode, setViewMode] = useState("grid"); // "grid" | "list"
+  const [isSwitching, setIsSwitching] = useState(false);
   const { projects, loading, error } = useProjectsData();
+  const viewRef = useRef(null);
+
+  const handleViewModeChange = (nextView) => {
+    if (isSwitching || nextView === viewMode) return;
+
+    const currentView = viewRef.current;
+    if (!currentView) {
+      setViewMode(nextView);
+      return;
+    }
+
+    setIsSwitching(true);
+    gsap.to(currentView, {
+      autoAlpha: 0,
+      y: -8,
+      duration: 0.2,
+      ease: "power2.in",
+      onComplete: () => {
+        setViewMode(nextView);
+        setIsSwitching(false);
+      }
+    });
+  };
 
   useEffect(() => {
     if (loading || !projects.length) return undefined;
@@ -29,6 +54,15 @@ function Work() {
 
     return undefined;
   }, [viewMode, loading, projects.length]);
+
+  useEffect(() => {
+    if (!viewRef.current) return;
+    gsap.fromTo(
+      viewRef.current,
+      { autoAlpha: 0, y: 10 },
+      { autoAlpha: 1, y: 0, duration: 0.28, ease: "power2.out" }
+    );
+  }, [viewMode]);
 
   if (loading) {
     return (
@@ -60,28 +94,30 @@ function Work() {
             <div className="inline-flex flex-row items-center gap-2">
               <span>[</span>
 
-              <div className="underline-link relative inline-block">
+              <div className="underline-link group relative inline-block">
                 <button
                   type="button"
                   className="underline-trigger relative inline-block"
-                  onClick={() => setViewMode("grid")}
+                  onClick={() => handleViewModeChange("grid")}
+                  disabled={isSwitching}
                 >
                   Grid
                 </button>
-                <div className="underline-line absolute left-0 -bottom-0.5 border-b border-white w-full origin-left scale-x-0" />
+                <div className="underline-line absolute left-0 -bottom-0.5 border-b border-white w-full origin-left scale-x-0 transition-transform duration-300 group-hover:scale-x-100" />
               </div>
 
               <span>/</span>
 
-              <div className="underline-link relative inline-block">
+              <div className="underline-link group relative inline-block">
                 <button
                   type="button"
                   className="underline-trigger relative inline-block"
-                  onClick={() => setViewMode("list")}
+                  onClick={() => handleViewModeChange("list")}
+                  disabled={isSwitching}
                 >
                   List
                 </button>
-                <div className="underline-line absolute left-0 -bottom-0.5 border-b border-white w-full origin-left scale-x-0" />
+                <div className="underline-line absolute left-0 -bottom-0.5 border-b border-white w-full origin-left scale-x-0 transition-transform duration-300 group-hover:scale-x-100" />
               </div>
 
               <span>]</span>
@@ -91,7 +127,8 @@ function Work() {
       </div>
 
       <section id="projectsSection">
-        {viewMode === "grid" ? (
+        <div ref={viewRef}>
+          {viewMode === "grid" ? (
           <div className="grid md:grid-cols-2">
             {projects.map((project) => (
               <AnimatedLink
@@ -118,9 +155,9 @@ function Work() {
           <div className="relative px-4 sm:px-6 pb-[12vh] sm:pb-[20vh]">
             <div className="border-t border-white/20">
               <div className="hidden md:grid grid-cols-12 text-[0.65rem] uppercase tracking-[0.18em] text-white/50 py-4 border-b border-white/10">
-                <div className="col-span-5">Name</div>
+                <div className="col-span-6">Name</div>
                 <div className="col-span-2">Year</div>
-                <div className="col-span-5">Services</div>
+                <div className="col-span-4">Services</div>
               </div>
 
               {projects.map((project) => (
@@ -130,7 +167,7 @@ function Work() {
                   className="work-list-item grid grid-cols-1 md:grid-cols-12 gap-3 md:gap-0 py-6 sm:py-8 border-b border-white/10 cursor-pointer group"
                   data-image={project.thumbnailImage}
                 >
-                  <div className="col-span-5">
+                  <div className="col-span-6">
                     <h3 className="text-[clamp(2rem,4.2vw,3.6rem)] leading-none text-white/70 group-hover:text-white transition-colors duration-300">
                       {project.title}
                     </h3>
@@ -143,7 +180,7 @@ function Work() {
                     {project.year}
                   </div>
 
-                  <div className="col-span-5 text-[clamp(0.82rem,1.1vw,1rem)] text-white/75">
+                  <div className="col-span-4 text-[clamp(0.82rem,1.1vw,1rem)] text-white/75">
                     <span className="md:hidden text-white/45 uppercase text-[0.62rem] tracking-[0.16em] mr-2">
                       Services:
                     </span>
@@ -164,7 +201,8 @@ function Work() {
               </div>
             </div>
           </div>
-        )}
+          )}
+        </div>
       </section>
     </>
   );

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
@@ -23,17 +23,22 @@ import {
 
 function App() {
   const location = useLocation();
-  const imagesReady = useImagePreloader();
+  const { done: imagesReady, progress, fromCache } = useImagePreloader();
   const scrollContainerRef = useRef(null);
+  const [showPreloader, setShowPreloader] = useState(!fromCache);
+
+  const handlePreloaderComplete = useCallback(() => {
+    setShowPreloader(false);
+  }, []);
 
   useEffect(() => {
-    if (!imagesReady) return undefined;
+    if (!imagesReady || showPreloader) return undefined;
 
     const destroySmoothScroll = initSmoothScroll(scrollContainerRef.current);
     return () => {
       if (destroySmoothScroll) destroySmoothScroll();
     };
-  }, [imagesReady]);
+  }, [imagesReady, showPreloader]);
 
   useEffect(() => {
     const cleanupUnderline = setupUnderlineHover();
@@ -45,13 +50,9 @@ function App() {
     };
   }, [location.pathname]);
 
-  if (!imagesReady) {
-    return <Preloader />;
-  }
-
   return (
     <div>
-      <ScrollProgress />
+      {!showPreloader && <ScrollProgress />}
       <PageTransition>
         <div ref={scrollContainerRef} data-scroll-container>
           <Navbar />
@@ -68,7 +69,14 @@ function App() {
           <Footer />
         </div>
       </PageTransition>
-      <ConsentBanner />
+      {!showPreloader && <ConsentBanner />}
+      {showPreloader && (
+        <Preloader
+          progress={progress}
+          done={imagesReady}
+          onComplete={handlePreloaderComplete}
+        />
+      )}
     </div>
   );
 }
